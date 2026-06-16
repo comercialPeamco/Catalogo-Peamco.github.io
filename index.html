@@ -1,0 +1,860 @@
+    <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEAMCO S.A.S. | Portal Corporativo Integral - Ensayos de Aptitud y Metrología</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        azul: '#0000d0',
+                        verde: '#29c819',
+                        morado: '#7045b4',
+                        cafe: '#994b1a',
+                        negro: '#232715',
+                        gris: '#7b7b7c',
+                        fondoclaro: '#fcfcfd'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                        display: ['Arial Black', 'Impact', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .title-brand {
+            font-family: 'Arial Black', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+        }
+        .text-brand {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        /* Custom scrollbar for programmatic lists */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #c5c5c5;
+            border-radius: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
+    </style>
+</head>
+<body class="bg-fondoclaro text-gray-800 text-brand">
+
+    <!-- TOP ACCREDITATION BAR -->
+    <div class="bg-negro text-white py-2 px-4 text-xs md:text-sm border-b-2 border-verde">
+        <div class="max-w-7xl mx-auto flex justify-center items-center">
+            <div class="flex items-center gap-2 text-[11px] md:text-xs font-semibold tracking-wide">
+                <span><i class="fa-solid fa-globe text-verde"></i> Cobertura Nacional e Internacional</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER BRAND & TAB NAVIGATION -->
+    <header class="bg-white shadow-md relative overflow-hidden">
+        <div class="absolute inset-y-0 right-0 w-1/3 bg-azul opacity-5 transform skew-x-12 translate-x-1/3 hidden lg:block"></div>
+        <div class="max-w-7xl mx-auto px-4 py-5 flex flex-col lg:flex-row justify-between items-center gap-6 relative z-10">
+            <!-- Brand block -->
+            <div class="flex items-center gap-4">
+                <!-- LOGO DE PEAMCO -->
+                <div class="w-16 h-16 flex items-center justify-center overflow-hidden rounded-xl">
+                    <img src="imagenes/logo sin fondo.png" alt="Logo PEAMCO S.A.S." class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <h1 class="title-brand text-3xl md:text-4xl text-azul leading-none">PEAMCO S.A.S.</h1>
+                    <p class="text-xs md:text-sm font-bold tracking-widest text-gray-500 uppercase mt-1">Ensayos de Aptitud y Metrología de Colombia</p>
+                </div>
+            </div>
+
+            <!-- Tabbed Navigation -->
+            <nav class="flex flex-wrap gap-1.5 justify-center bg-gray-100/80 p-1.5 rounded-2xl border border-gray-200/50">
+                <button onclick="switchTab('inicio')" id="tab-inicio" class="tab-btn px-4 py-2 rounded-xl text-xs md:text-sm font-bold bg-azul text-white transition-all duration-300">
+                    Inicio
+                </button>
+                <button onclick="switchTab('sectores')" id="tab-sectores" class="tab-btn px-4 py-2 rounded-xl text-xs md:text-sm font-bold text-gray-600 hover:bg-gray-200 transition-all duration-300">
+                    Sectores
+                </button>
+                <button onclick="switchTab('cronogramas')" id="tab-cronogramas" class="tab-btn px-4 py-2 rounded-xl text-xs md:text-sm font-bold text-gray-600 hover:bg-gray-200 transition-all duration-300">
+                    Catálogo de Ensayos
+                </button>
+                <button onclick="switchTab('participacion')" id="tab-participacion" class="tab-btn px-4 py-2 rounded-xl text-xs md:text-sm font-bold text-gray-600 hover:bg-gray-200 transition-all duration-300">
+                    Participación
+                </button>
+                <button onclick="switchTab('contacto')" id="tab-contacto" class="tab-btn px-4 py-2 rounded-xl text-xs md:text-sm font-bold text-gray-600 hover:bg-gray-200 transition-all duration-300">
+                    Consultas Técnicas
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- CUSTOM DIALOG ALERT SYSTEM -->
+    <div id="custom-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl p-6 max-w-md w-full mx-4 shadow-2xl border border-gray-100 transform scale-95 transition-transform duration-300" id="modal-card">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-full bg-blue-50 text-azul flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-circle-check" id="modal-icon"></i>
+                </div>
+                <h4 class="font-extrabold text-lg text-negro" id="modal-title">Solicitud Enviada</h4>
+            </div>
+            <p class="text-sm text-gray-600 mb-6 leading-relaxed" id="modal-message">Su solicitud técnica de información ha sido registrada de manera exitosa en nuestro sistema corporativo.</p>
+            <button onclick="closeModal()" class="w-full bg-azul text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider hover:bg-opacity-95 transition">Aceptar</button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+
+        <!-- ================= PESTAÑA 1: INICIO ================= -->
+        <section id="content-inicio" class="tab-content block space-y-12">
+            <!-- Hero Board Banner -->
+            <div class="bg-gradient-to-r from-azul via-morado to-negro rounded-3xl p-8 md:p-14 text-white relative overflow-hidden shadow-2xl">
+                <div class="max-w-3xl relative z-10 space-y-6">
+                    <span class="bg-verde text-negro text-xs font-black uppercase px-4 py-1.5 rounded-full tracking-wider shadow-sm">PROVEEDOR DE EA ACREDITADO</span>
+                    <h2 class="text-4xl md:text-6xl font-extrabold leading-none tracking-tight">Confianza técnica para su laboratorio</h2>
+                    <p class="text-base md:text-xl text-blue-100 font-light leading-relaxed">
+                        Programas estructurados de ensayos de aptitud y comparaciones interlaboratorios destinados a demostrar competencia técnica, fortalecer la calidad de sus resultados analíticos y respaldar procesos formales de acreditación bajo lineamientos internacionales.
+                    </p>
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <button onclick="switchTab('cronogramas')" class="bg-verde hover:bg-opacity-90 text-negro font-bold px-8 py-4 rounded-xl shadow-lg shadow-green-500/20 transition duration-300 transform hover:-translate-y-0.5 text-sm uppercase tracking-wider">
+                            Ver Catálogo General
+                        </button>
+                        <button onclick="switchTab('participacion')" class="bg-white/10 hover:bg-white/20 border border-white/20 font-bold px-8 py-4 rounded-xl transition duration-300 text-sm uppercase tracking-wider">
+                            Ruta de Participación
+                        </button>
+                    </div>
+                </div>
+                <div class="absolute right-0 bottom-0 top-0 w-1/3 opacity-10 hidden lg:block">
+                    <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M0,100 C30,40 70,60 100,0 L100,100 Z" fill="white"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- MISSION & VISION SECTION -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Mission Card -->
+                <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-azul flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-compass"></i>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-negro">Nuestra Misión</h3>
+                    <p class="text-gray-600 text-sm md:text-base leading-relaxed">
+                        Fortalecer la competencia técnica de los laboratorios de ensayo y calibración en Latinoamérica mediante el diseño, ejecución y análisis estadístico de Programas de Ensayos de Aptitud y Comparaciones Interlaboratorios confiables y trazables.
+                    </p>
+                </div>
+
+                <!-- Vision Card -->
+                <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-green-50 text-verde flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-negro">Nuestra Visión</h3>
+                    <p class="text-gray-600 text-sm md:text-base leading-relaxed">
+                        Consolidarnos como el aliado estratégico líder para laboratorios de ensayo y calibración en Latinoamérica, con una presencia integral en Colombia, Perú, El Salvador, Ecuador, Guatemala, Panamá y Chile, impulsando el aseguramiento de la validez de los resultados del sector.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ¿Qué es un Ensayo de Aptitud? Block -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+                <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <span class="text-verde font-bold text-xs uppercase tracking-widest">Aseguramiento de Calidad Metrológica</span>
+                        <h3 class="text-2xl md:text-3xl font-extrabold text-negro leading-tight">¿Qué es un ensayo de aptitud?</h3>
+                        <p class="text-gray-600 text-sm md:text-base leading-relaxed">
+                            Es una evaluación estructurada del desempeño de los laboratorios frente a criterios preestablecidos mediante comparaciones interlaboratorios sistemáticas. Permite obtener evidencia objetiva sobre la confiabilidad de las mediciones, calibraciones y ensayos analíticos.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-azul transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-azul flex items-center justify-center text-xl font-black mb-6">01</div>
+                            <h4 class="font-bold text-lg text-negro mb-3">Evalúa Desempeño</h4>
+                            <p class="text-gray-500 text-sm leading-relaxed">Contrasta de manera objetiva los resultados analíticos frente a criterios técnicos preestablecidos de alta precisión estadística.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-verde transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-green-50 text-verde flex items-center justify-center text-xl font-black mb-6">02</div>
+                            <h4 class="font-bold text-lg text-negro mb-3">Mejora la Calidad</h4>
+                            <p class="text-gray-500 text-sm leading-relaxed">Ayuda a identificar oportunamente desviaciones de medida, errores sistemáticos de proceso y oportunidades de mejora reales.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-morado transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-purple-50 text-morado flex items-center justify-center text-xl font-black mb-6">03</div>
+                            <h4 class="font-bold text-lg text-negro mb-3">Respalda Acreditación</h4>
+                            <p class="text-gray-500 text-sm leading-relaxed">Aporta el soporte técnico y la evidencia documental robusta requerida por los entes de acreditación bajo la norma **ISO/IEC 17025:2017**.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KEY CLIENTS LOGOS / RECOGNITION SECTION -->
+            <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm space-y-6">
+                <div class="text-center space-y-1">
+                    <span class="text-xs text-azul font-bold tracking-widest uppercase">NUESTROS CLIENTES</span>
+                    <h3 class="text-2xl font-black text-negro">Medición Confiable y Respaldo</h3>
+                </div>
+                <div class="flex flex-wrap items-center justify-center gap-6 md:gap-12 opacity-85 py-4">
+                    <span class="font-display text-gray-400 text-base tracking-tighter hover:text-azul transition cursor-default">AUSCULTAR</span>
+                    <span class="font-display text-gray-400 text-base tracking-tighter hover:text-azul transition cursor-default">CONCRELAB</span>
+                    <span class="font-display text-gray-400 text-base tracking-tighter hover:text-azul transition cursor-default">SOCOTEC</span>
+                    <span class="font-display text-gray-400 text-base tracking-tighter hover:text-azul transition cursor-default">MABE</span>
+                    <span class="font-display text-gray-400 text-base tracking-tighter hover:text-azul transition cursor-default">JDM INGENIERÍA</span>
+                    <span class="font-display text-gray-400 text-base tracking-tighter hover:text-azul transition cursor-default">ZOFRE</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PESTAÑA 2: SECTORES Y LÍNEAS DE ENSAYO ================= -->
+        <section id="content-sectores" class="tab-content hidden space-y-10">
+            <div>
+                <h2 class="text-3xl font-extrabold text-negro">Sectores y Líneas de Ensayo</h2>
+                <p class="text-gray-500 text-sm mt-1">PEAMCO S.A.S. ofrece esquemas eficientes adaptados a las necesidades de evaluación y calibración de sus sistemas de gestión.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Programmed schemes -->
+                <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-azul flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-negro">Programas de Ensayos de Aptitud</h3>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-verde mt-1"></i> Planeación sistemática diseñada de acuerdo con las demandas del sector.</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-verde mt-1"></i> Informes de comparison interlaboratorio rigurosos e independientes.</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-verde mt-1"></i> Respaldo técnico y confidencialidad en cada proceso.</li>
+                    </ul>
+                </div>
+                <!-- Bilaterals -->
+                <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-green-50 text-verde flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-handshake"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-negro">Ensayos Bilaterales a Demanda</h3>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-verde mt-1"></i> Soluciones dinámicas a lo largo de todo el año comercial.</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-verde mt-1"></i> Diseñados a la medida del participante en plazos de ejecución cortos.</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-verde mt-1"></i> Sujetos a la viabilidad y caracterización de los ítems de ensayo.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Interactivity Sector Cards -->
+            <div class="space-y-6">
+                <div class="flex items-center gap-3 border-b border-gray-100 pb-3">
+                    <h3 class="text-xl font-bold text-negro">Sectores Especializados PEAMCO</h3>
+                    <span class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-500 font-bold uppercase">Click para ver catálogo sectorial</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div onclick="switchTabWithSector('cronogramas', 'no-metalicos')" class="bg-white p-5 rounded-2xl border border-gray-100 hover:border-azul hover:shadow-md cursor-pointer transition-all duration-300 space-y-2 group">
+                        <div class="flex justify-between items-start">
+                            <span class="text-2xl text-azul"><i class="fa-solid fa-trowel-bricks"></i></span>
+                            <span class="text-[10px] text-gray-400 group-hover:text-azul font-bold transition">Abrir sector →</span>
+                        </div>
+                        <h4 class="font-bold text-sm text-negro">Construcción: No Metálicos</h4>
+                        <p class="text-[11px] text-gray-500 leading-relaxed">Suelos, agregados, rocas, concreto, cemento, asfaltos y mampostería.</p>
+                    </div>
+
+                    <div onclick="switchTabWithSector('cronogramas', 'metalicos')" class="bg-white p-5 rounded-2xl border border-gray-100 hover:border-azul hover:shadow-md cursor-pointer transition-all duration-300 space-y-2 group">
+                        <div class="flex justify-between items-start">
+                            <span class="text-2xl text-azul"><i class="fa-solid fa-cubes-stacked"></i></span>
+                            <span class="text-[10px] text-gray-400 group-hover:text-azul font-bold transition">Abrir sector →</span>
+                        </div>
+                        <h4 class="font-bold text-sm text-negro">Construcción: Metálicos</h4>
+                        <p class="text-[11px] text-gray-500 leading-relaxed">Mallas electrosoldadas, barras corrugadas y ensayos de doblado.</p>
+                    </div>
+
+                    <div onclick="switchTabWithSector('cronogramas', 'agua')" class="bg-white p-5 rounded-2xl border border-gray-100 hover:border-azul hover:shadow-md cursor-pointer transition-all duration-300 space-y-2 group">
+                        <div class="flex justify-between items-start">
+                            <span class="text-2xl text-azul"><i class="fa-solid fa-faucet-drip"></i></span>
+                            <span class="text-[10px] text-gray-400 group-hover:text-azul font-bold transition">Abrir sector →</span>
+                        </div>
+                        <h4 class="font-bold text-sm text-negro">Medidores de Agua</h4>
+                        <p class="text-[11px] text-gray-500 leading-relaxed">Pruebas en medidores de agua potable fría de diámetros DN15 y DN20.</p>
+                    </div>
+
+                    <div onclick="switchTabWithSector('cronogramas', 'energia')" class="bg-white p-5 rounded-2xl border border-gray-100 hover:border-azul hover:shadow-md cursor-pointer transition-all duration-300 space-y-2 group">
+                        <div class="flex justify-between items-start">
+                            <span class="text-2xl text-azul"><i class="fa-solid fa-bolt"></i></span>
+                            <span class="text-[10px] text-gray-400 group-hover:text-azul font-bold transition">Abrir sector →</span>
+                        </div>
+                        <h4 class="font-bold text-sm text-negro">Medidores de Energía</h4>
+                        <p class="text-[11px] text-gray-500 leading-relaxed">Calibración de equipos de prueba, medidores electromecánicos y estáticos.</p>
+                    </div>
+
+                    <div onclick="switchTabWithSector('cronogramas', 'textiles')" class="bg-white p-5 rounded-2xl border border-gray-100 hover:border-azul hover:shadow-md cursor-pointer transition-all duration-300 space-y-2 group">
+                        <div class="flex justify-between items-start">
+                            <span class="text-2xl text-azul"><i class="fa-solid fa-shirt"></i></span>
+                            <span class="text-[10px] text-gray-400 group-hover:text-azul font-bold transition">Abrir sector →</span>
+                        </div>
+                        <h4 class="font-bold text-sm text-negro">Textiles</h4>
+                        <p class="text-[11px] text-gray-500 leading-relaxed">Masa por área, ancho, hilos, tracción, solidez del color y desgarre.</p>
+                    </div>
+
+                    <div onclick="switchTabWithSector('cronogramas', 'transformadores')" class="bg-white p-5 rounded-2xl border border-gray-100 hover:border-azul hover:shadow-md cursor-pointer transition-all duration-300 space-y-2 group">
+                        <div class="flex justify-between items-start">
+                            <span class="text-2xl text-azul"><i class="fa-solid fa-tower-cell"></i></span>
+                            <span class="text-[10px] text-gray-400 group-hover:text-azul font-bold transition">Abrir sector →</span>
+                        </div>
+                        <h4 class="font-bold text-sm text-negro">Transformadores</h4>
+                        <p class="text-[11px] text-gray-500 leading-relaxed">Sistemas de tensión y corriente: error de relación y desfase.</p>
+                    </div>
+
+                    <div onclick="switchTabWithSector('cronogramas', 'cuero')" class="bg-white p-5 rounded-2xl border border-gray-100 hover:border-azul hover:shadow-md cursor-pointer transition-all duration-300 space-y-2 group">
+                        <div class="flex justify-between items-start">
+                            <span class="text-2xl text-azul"><i class="fa-solid fa-shoe-prints"></i></span>
+                            <span class="text-[10px] text-gray-400 group-hover:text-azul font-bold transition">Abrir sector →</span>
+                        </div>
+                        <h4 class="font-bold text-sm text-negro">Cueros</h4>
+                        <p class="text-[11px] text-gray-500 leading-relaxed">Determinación de tracción, elongación, desgarre simple y espesor.</p>
+                    </div>
+
+                    <div onclick="switchTabWithSector('cronogramas', 'caucho')" class="bg-white p-5 rounded-2xl border border-gray-100 hover:border-azul hover:shadow-md cursor-pointer transition-all duration-300 space-y-2 group">
+                        <div class="flex justify-between items-start">
+                            <span class="text-2xl text-azul"><i class="fa-solid fa-ring"></i></span>
+                            <span class="text-[10px] text-gray-400 group-hover:text-azul font-bold transition">Abrir sector →</span>
+                        </div>
+                        <h4 class="font-bold text-sm text-negro">Caucho</h4>
+                        <p class="text-[11px] text-gray-500 leading-relaxed">Ensayos de densidad volumétrica, tracción mecánica y desgarre.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PESTAÑA 3: CRONOGRAMAS COMPLETOS ================= -->
+        <section id="content-cronogramas" class="tab-content hidden space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-negro">Catálogo General de Ensayos</h2>
+                    <p class="text-gray-500 text-sm mt-1">Examine el alcance de ensayos analíticos y metrológicos de PEAMCO para el aseguramiento de resultados.</p>
+                </div>
+                <!-- Live Search Engine -->
+                <div class="relative w-full md:w-96">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 pointer-events-none">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                    <input type="text" id="chronology-search" onkeyup="filterChronology()" placeholder="Buscar matriz, ensayo o palabra clave (ej. Concreto)..." class="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-2xl focus:ring-2 focus:ring-azul focus:border-transparent outline-none text-sm transition shadow-sm" name="chronology-search">
+                </div>
+            </div>
+
+            <!-- Category selector tags -->
+            <div class="flex flex-wrap gap-1.5 p-1 bg-gray-100 rounded-2xl border border-gray-200/50" id="chronology-sector-filters">
+                <button onclick="filterChronologySector('todos')" class="chronology-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-azul text-white transition-all">
+                    Todos
+                </button>
+                <button onclick="filterChronologySector('no-metalicos')" class="chronology-filter-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-white transition-all">
+                    No Metálicos
+                </button>
+                <button onclick="filterChronologySector('metalicos')" class="chronology-filter-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-white transition-all">
+                    Metálicos
+                </button>
+                <button onclick="filterChronologySector('agua')" class="chronology-filter-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-white transition-all">
+                    Agua
+                </button>
+                <button onclick="filterChronologySector('energia')" class="chronology-filter-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-white transition-all">
+                    Energía
+                </button>
+                <button onclick="filterChronologySector('textiles')" class="chronology-filter-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-white transition-all">
+                    Textiles
+                </button>
+                <button onclick="filterChronologySector('transformadores')" class="chronology-filter-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-white transition-all">
+                    Transformadores
+                </button>
+                <button onclick="filterChronologySector('cuero')" class="chronology-filter-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-white transition-all">
+                    Cuero
+                </button>
+                <button onclick="filterChronologySector('caucho')" class="chronology-filter-btn px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-white transition-all">
+                    Caucho
+                </button>
+            </div>
+
+            <!-- Program Table Container -->
+            <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse" id="chronology-table">
+                        <thead>
+                            <tr class="bg-azul text-white text-xs uppercase tracking-wider">
+                                <th class="p-4 font-black w-1/4">Sector Asociado</th>
+                                <th class="p-4 font-black w-1/2">Descripción del Ensayo de Aptitud</th>
+                                <th class="p-4 font-black w-1/4">Sustancia, Material o Matriz</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 text-sm font-light text-gray-600" id="chronology-table-body">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="p-4 bg-blue-50/50 rounded-2xl border border-blue-100 flex items-start gap-3">
+                <span class="text-azul text-lg"><i class="fa-solid fa-circle-info"></i></span>
+                <p class="text-xs text-blue-800 leading-relaxed">
+                    <strong>Información del Cronograma:</strong><code class="bg-blue-100 px-1 rounded text-azul font-mono"></code>
+                </p>
+            </div>
+        </section>
+
+        <!-- ================= PESTAÑA 4: RUTA DE PARTICIPACIÓN ================= -->
+        <section id="content-participacion" class="tab-content hidden space-y-12">
+            <div>
+                <h2 class="text-3xl font-extrabold text-negro">Ruta de Participación en Programas</h2>
+                <p class="text-gray-500 text-sm mt-1">Estructura coordinada y transparente para el correcto ingreso de su laboratorio al esquema técnico.</p>
+            </div>
+
+            <!-- Interactive Steps -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-6 relative">
+                <div class="absolute top-1/2 left-0 right-0 h-1 bg-gray-100 -translate-y-1/2 hidden lg:block -z-10"></div>
+                <!-- Step 1 -->
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm relative space-y-3">
+                    <div class="w-10 h-10 rounded-full bg-azul text-white flex items-center justify-center font-bold text-sm">1</div>
+                    <h4 class="font-bold text-negro text-base">Invitación e inscripción</h4>
+                    <p class="text-gray-500 text-xs leading-relaxed">Recepción de convocatoria, firma del acuerdo de confidencialidad y envío del registro formal de inscripción.</p>
+                </div>
+                <!-- Step 2 -->
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-3">
+                    <div class="w-10 h-10 rounded-full bg-verde text-negro flex items-center justify-center font-bold text-sm">2</div>
+                    <h4 class="font-bold text-negro text-base">Cotización comercial</h4>
+                    <p class="text-gray-500 text-xs leading-relaxed">PEAMCO genera y remite la cotización oficial; el laboratorio formaliza mediante orden de compra y pago de participación.</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-3">
+                    <div class="w-10 h-10 rounded-full bg-morado text-white flex items-center justify-center font-bold text-sm">3</div>
+                    <h4 class="font-bold text-negro text-base">Instrucciones e ítems</h4>
+                    <p class="text-gray-500 text-xs leading-relaxed">Despacho de los ítems caracterizados junto con los instructivos de ensayo y el formato oficial para el registro de resultados.</p>
+                </div>
+                <!-- Step 4 -->
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-3">
+                    <div class="w-10 h-10 rounded-full bg-cafe text-white flex items-center justify-center font-bold text-sm">4</div>
+                    <h4 class="font-bold text-negro text-base">Ensayos y reporte</h4>
+                    <p class="text-gray-500 text-xs leading-relaxed">Ejecución interna del método de ensayo dentro del laboratorio y envío de resultados en los plazos definidos.</p>
+                </div>
+                <!-- Step 5 -->
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-3">
+                    <div class="w-10 h-10 rounded-full bg-negro text-white flex items-center justify-center font-bold text-sm">5</div>
+                    <h4 class="font-bold text-negro text-base">Emisión de informes</h4>
+                    <p class="text-gray-500 text-xs leading-relaxed">Revisión de informe preliminar para comentarios y posterior publicación definitiva del reporte final del desempeño de aptitud.</p>
+                </div>
+            </div>
+
+            <!-- Six Main Benefits of participation -->
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-negro text-center">Beneficios Clave para el Laboratorio Participante</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="flex gap-4 p-5 bg-white rounded-2xl border border-gray-100">
+                        <div class="text-azul text-xl mt-1"><i class="fa-solid fa-circle-check"></i></div>
+                        <div>
+                            <h4 class="font-bold text-negro text-sm">Evidencia Objetiva</h4>
+                            <p class="text-gray-500 text-xs mt-1">Garantiza el respaldo documentado de competencia de sus ensayos.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 p-5 bg-white rounded-2xl border border-gray-100">
+                        <div class="text-verde text-xl mt-1"><i class="fa-solid fa-circle-check"></i></div>
+                        <div>
+                            <h4 class="font-bold text-negro text-sm">Validez de Resultados</h4>
+                            <p class="text-gray-500 text-xs mt-1">Fortalece el aseguramiento de calidad interna exigido por normativas internacionales.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 p-5 bg-white rounded-2xl border border-gray-100">
+                        <div class="text-morado text-xl mt-1"><i class="fa-solid fa-circle-check"></i></div>
+                        <div>
+                            <h4 class="font-bold text-negro text-sm">Comparación Interlaboratorios</h4>
+                            <p class="text-gray-500 text-xs mt-1">Permite la comparison técnica de exactitud analítica con laboratorios pares.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 p-5 bg-white rounded-2xl border border-gray-100">
+                        <div class="text-cafe text-xl mt-1"><i class="fa-solid fa-circle-check"></i></div>
+                        <div>
+                            <h4 class="font-bold text-negro text-sm">Mejora Continua</h4>
+                            <p class="text-gray-500 text-xs mt-1">Detecta oportunamente riesgos de proceso, sesgos y oportunidades de ajuste.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 p-5 bg-white rounded-2xl border border-gray-100">
+                        <div class="text-negro text-xl mt-1"><i class="fa-solid fa-circle-check"></i></div>
+                        <div>
+                            <h4 class="font-bold text-negro text-sm">Soporte para Acreditación</h4>
+                            <p class="text-gray-500 text-xs mt-1">Provee evidencia técnica para procesos de auditoría de entes evaluadores.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 p-5 bg-white rounded-2xl border border-gray-100">
+                        <div class="text-azul text-xl mt-1"><i class="fa-solid fa-circle-check"></i></div>
+                        <div>
+                            <h4 class="font-bold text-negro text-sm">Acompañamiento Técnico</h4>
+                            <p class="text-gray-500 text-xs mt-1">Canal directo de comunicación técnica y soporte durante las rondas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PESTAÑA 5: CONSULTA TÉCNICA ================= -->
+        <section id="content-contacto" class="tab-content hidden space-y-8">
+            <div>
+                <h2 class="text-3xl font-extrabold text-negro">Solicitud de Información y Oferta Técnica</h2>
+                <p class="text-gray-500 text-sm mt-1">Comuníquese con nuestra área de operaciones y servicio comercial para estructurar su proposal de participación.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Informative panel -->
+                <div class="lg:col-span-1 bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-6">
+                    <h3 class="font-bold text-negro text-lg">Área Comercial</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">
+                        Los Ensayos de Aptitud se cotizan de forma directa y personalizada según el volumen, las muestras requeridas, la locación del laboratorio y la escala de participación comercial.
+                    </p>
+                    <div class="p-4 bg-blue-50/50 rounded-2xl border border-blue-100 space-y-3">
+                        <h4 class="text-xs font-bold text-azul uppercase tracking-wider">Acompañamiento B2B</h4>
+                        <p class="text-xs text-gray-600">
+                            Podemos desarrollar comparaciones interlaboratorios de carácter bilateral si sus necesidades técnicas se encuentran fuera del cronograma estándar del sector.
+                        </p>
+                    </div>
+                    <div class="text-xs text-gray-400 font-mono">
+                        <br>
+                       
+                    </div>
+                </div>
+
+                <!-- Contact Form Panel -->
+                <div class="lg:col-span-2 bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                    <form id="contact-technical-form"  action="https://formsubmit.co/comercial.peamco@gmail.com" method="POST" class="space-y-6">
+<input type="hidden" name="_subject" value="Nueva solicitud desde el catálogo PEAMCO">
+<input type="hidden" name="_captcha" value="false">
+<input type="hidden" name="_template" value="table">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Nombre de su Organización / Laboratorio *</label>
+                                <input type="text" id="lab-name" required placeholder="Ej. Laboratorio de Control de Materiales" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-azul outline-none" name="lab-name">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Correo Electrónico de Contacto *</label>
+                                <input type="email" id="lab-email" required placeholder="Ej. calidad@su-laboratorio.com" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-azul outline-none" name="lab-email">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Teléfono de Contacto</label>
+                                <input type="text" id="lab-phone" placeholder="Ej. +57 300 000 0000" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-azul outline-none" name="lab-phone">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Sector de Mayor Interés *</label>
+                                <select id="lab-sector" required class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-azul outline-none" name="lab-sector">
+                                    <option value="" disabled selected>Seleccione un sector...</option>
+                                    <option value="no-metalicos">Construcción: No Metálicos</option>
+                                    <option value="metalicos">Construcción: Metálicos</option>
+                                    <option value="agua">Medidores de Agua</option>
+                                    <option value="energia">Medidores de Energía</option>
+                                    <option value="textiles">Textiles</option>
+                                    <option value="transformadores">Transformadores de Tensión/Corriente</option>
+                                    <option value="cuero">Cueros</option>
+                                    <option value="caucho">Caucho</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Mensaje y Detalle de los Ensayos Requeridos</label>
+                            <textarea id="lab-message" rows="4" placeholder="Escriba los ensayos de su interés, el número de participantes estimados y cualquier especificación técnica..." class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-azul outline-none" name="lab-message"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full bg-verde hover:bg-opacity-95 text-negro font-bold py-4 rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-green-500/10 transition">
+                            Enviar Solicitud Comercial de Información
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-negro text-white mt-16 py-12 px-4 border-t-4 border-azul">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-8">
+            <div class="space-y-3">
+                <h4 class="title-brand text-xl text-blanco">PEAMCO S.A.S.</h4>
+                <p class="text-xs text-gray-400">Ensayos de Aptitud y Metrología de Colombia.</p>
+                <div class="text-xs space-y-2 text-gray-300">
+                    <p><i class="fa-solid fa-location-dot text-verde mr-2"></i> Calle 75 A # 66-50 Oficina 419, Centro Empresarial Metrópolis, Bogotá - Colombia</p>
+                    <p><i class="fa-solid fa-phone text-verde mr-2"></i> (+57) (601) 745 3484</p>
+                    <p><i class="fa-brands fa-whatsapp text-verde mr-2"></i> (+57) 318 526 3597</p>
+                    <p><i class="fa-solid fa-envelope text-verde mr-2"></i> comercial@peamco.com.co</p>
+                </div>
+            </div>
+
+            <div class="space-y-3 flex flex-col justify-end items-start md:items-end md:text-right">
+                <p class="text-[10px] text-gray-500">© 2026 PEAMCO S.A.S. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CODIGO INTERACTIVO JS -->
+    <script>
+        const programDatabase = [
+            // No Metálicos
+            { sector: "no-metalicos", name: "Determinación del Contenido de Humedad de Suelos y Rocas, con base en la Masa. (Método B).", matrix: "Suelo / Roca" },
+            { sector: "no-metalicos", name: "Determinación del Límite Líquido, del Límite Plástico y del Índice de Plasticidad de los Suelos Cohesivos. (Método A).", matrix: "Suelo" },
+            { sector: "no-metalicos", name: "Determinación de la gravedad específica de las partículas sólidas de los suelos y del llenante mineral, empleando un picnómetro con agua.", matrix: "Suelo" },
+            { sector: "no-metalicos", name: "Determinación de la Granulometría por Tamizado de los Agregados Finos y Gruesos.", matrix: "Agregado" },
+            { sector: "no-metalicos", name: "Determinación de los tamaños de las partículas de los suelos.", matrix: "Suelo" },
+            { sector: "no-metalicos", name: "Determinación del Equivalente de Arena de Suelos y Agregados Finos.", matrix: "Suelo o Agregados" },
+            { sector: "no-metalicos", name: "Determinación de las Relaciones de Humedad - Peso Unitario Seco en los Suelos, (Ensayo Modificado de Compactación). (Método C).", matrix: "Suelo" },
+            { sector: "no-metalicos", name: "CBR de suelos compactados en el laboratorio y sobre muestra inalterada.", matrix: "Suelo" },
+            { sector: "no-metalicos", name: "Determinación de la Resistencia a la Compresión de Especímenes Cilíndricos de Concreto.", matrix: "Concreto" },
+            { sector: "no-metalicos", name: "Determinación de la Densidad Volumétrica (Masa Unitaria) y Vacíos en Agregados.", matrix: "Suelo / Agregados" },
+            { sector: "no-metalicos", name: "Determinación del valor de 10% de finos.", matrix: "Agregados" },
+            { sector: "no-metalicos", name: "Determinación de la densidad y el peso unitario en terreno. Método del Cono de Arena.", matrix: "Suelos" },
+            { sector: "no-metalicos", name: "Determinación de índices de aplanamiento y de alargamiento de los agregados para carreteras.", matrix: "Agregados" },
+            { sector: "no-metalicos", name: "Determinación de la compresión triaxial sobre suelos cohesivos (Prueba no consolidada no drenada, UU).", matrix: "Suelo" },
+            { sector: "no-metalicos", name: "Determinación del contenido orgánico de un suelo mediante el ensayo de pérdida por ignición.", matrix: "Suelo" },
+            { sector: "no-metalicos", name: "Determinación de la Resistencia a la Flexión del Concreto usando una Viga simplemente apoyada y cargada en los Tercios de la luz libre.", matrix: "Concreto" },
+            { sector: "no-metalicos", name: "Determinación por Lavado del Material que pasa el Tamiz 75 µm (No 200) en Agregados Minerales.", matrix: "Suelo" },
+            { sector: "no-metalicos", name: "Determinación de la Resistencia al Desgaste por Abrasión e Impacto de Agregados Gruesos menores de 37,5 mm, Utilizando la Máquina de los Ángeles.", matrix: "Agregado" },
+            { sector: "no-metalicos", name: "Determinación del Peso Unitario de Muestras Irregulares (Método Parafinado) y Muestras Regulares.", matrix: "Suelo" },
+            { sector: "no-metalicos", name: "Determinación de la Extracción cuantitativa de asfalto en mezclas para pavimentos (método A).", matrix: "Mezclas Asfálticas, pavimentos" },
+            { sector: "no-metalicos", name: "Análisis granulométrico de los agregados extraídos de mezclas asfálticas.", matrix: "Mezclas Asfálticas, pavimentos" },
+            { sector: "no-metalicos", name: "Gravedad específica bulk y densidad de mezclas asfálticas compactadas no absorbentes empleando especímenes saturados y superficialmente secos.", matrix: "Mezclas Asfálticas, pavimentos" },
+            { sector: "no-metalicos", name: "Gravedad específica Máxima de mezclas asfálticas para pavimentos.", matrix: "Mezclas Asfálticas, pavimentos" },
+            { sector: "no-metalicos", name: "Estabilidad y flujo de mezclas asfálticas en caliente empleando el equipo Marshall.", matrix: "Mezclas Asfálticas, pavimentos" },
+            { sector: "no-metalicos", name: "Determinación de la resistencia a la compresión de rocas (Método C).", matrix: "Rocas" },
+            { sector: "no-metalicos", name: "Porcentaje de partículas fracturadas en un agregado grueso.", matrix: "Agregados" },
+            { sector: "no-metalicos", name: "Métodos para muestreo y ensayos de unidades de mampostería y otros productos de arcilla (Absorción).", matrix: "Mampostería" },
+            { sector: "no-metalicos", name: "Determinación de la Gravedad Especial y Absorción de los Agregados Gruesos.", matrix: "Agregado" },
+            { sector: "no-metalicos", name: "Determinación del corte directo de suelos bajo condiciones consolidadas y drenadas.", matrix: "Suelos" },
+            { sector: "no-metalicos", name: "Determinación del contenido de sales solubles en los suelos.", matrix: "Suelos" },
+            { sector: "no-metalicos", name: "Método de ensayo para determinar la densidad del cemento hidráulico.", matrix: "Cemento" },
+            { sector: "no-metalicos", name: "Método para determinar la finura del cemento hidráulico por medio del aparato Blaine de permeabilidad al aire.", matrix: "Cemento" },
+            { sector: "no-metalicos", name: "Determinación de las propiedades de consolidación unidimensional de los suelos.", matrix: "Suelos" },
+            { sector: "no-metalicos", name: "Determinación de la resistencia del agregado grueso y fino a la degradación por abrasión, utilizando el aparato Micro-Deval.", matrix: "Agregados" },
+            { sector: "no-metalicos", name: "Determinación de la resistencia a la carga puntual de las rocas.", matrix: "Rocas" },
+            { sector: "no-metalicos", name: "Determinación de la Gravedad Específica y Absorción de los Agregados Finos.", matrix: "Agregados" },
+            { sector: "no-metalicos", name: "Determinación de la Resistencia a la Compresión de Unidades de Mampostería de Arcilla.", matrix: "Mampostería de Arcilla" },
+            { sector: "no-metalicos", name: "Determinación de la Resistencia a la Compresión Inconfinada de Suelos Cohesivos.", matrix: "Suelo" },
+            { sector: "no-metalicos", name: "Determinación del contenido de vacíos en agregados finos no compactados.", matrix: "Agregados" },
+            { sector: "no-metalicos", name: "Cantidad de partículas livianas en un agregado pétreo.", matrix: "Agregados" },
+            { sector: "no-metalicos", name: "Método para la determinación del índice de desleimiento y durabilidad de lutitas y otras rocas débiles.", matrix: "Rocas" },
+            { sector: "no-metalicos", name: "Solidez de los agregados frente a la acción de soluciones de sulfato de sodio o de magnesio.", matrix: "Agregados" },
+            { sector: "no-metalicos", name: "Determinación del índice de colapso de un suelo parcialmente saturado.", matrix: "Suelos" },
+            { sector: "no-metalicos", name: "Método de ensayo a flexión de las unidades prefabricadas, para determinar su módulo de rotura.", matrix: "Bordillos / sardineles" },
+            { sector: "no-metalicos", name: "Determinación de la resistencia a la compresión de prefabricados de concreto.", matrix: "Concreto" },
+
+            // Metálicos
+            { sector: "metalicos", name: "Ensayo de Tracción.", matrix: "Mallas Electrosoldadas" },
+            { sector: "metalicos", name: "Resistencia al corte en la soldadura de mallas electrosoldadas para refuerzo de concreto.", matrix: "Mallas Electrosoldadas" },
+            { sector: "metalicos", name: "Medición de resaltes para grafil o malla electrosoldadas para refuerzo de concreto.", matrix: "Mallas Electrosoldadas" },
+            { sector: "metalicos", name: "Ensayo de Doblado.", matrix: "Mallas Electrosoldadas" },
+            { sector: "metalicos", name: "Programa de ensayos de Aptitud para Barras corrugadas: Fluencia, Resistencia a la Tracción y Alargamiento.", matrix: "Barras de Acero" },
+            { sector: "metalicos", name: "Programa de ensayos de Aptitud para Barras corrugadas (Dimensional): Inclinación, espaciamiento, altura y separación entre resaltes.", matrix: "Barras de Acero" },
+            { sector: "metalicos", name: "Programa de ensayos de Aptitud para Barras corrugadas: Doblado.", matrix: "Barras de Acero" },
+
+            // Medidores de Agua
+            { sector: "agua", name: "Prueba de Medidores de Agua Potable Fría DN15, por el Método de 'Recolección - Comparación directa'.", matrix: "Medidores de Agua Potable Fría DN15" },
+            { sector: "agua", name: "Prueba de Medidores de Agua Potable Fría DN20, por el Método de 'Recolección - Comparación directa'.", matrix: "Medidores de Agua Potable Fría DN20" },
+
+            // Medidores de Energía
+            { sector: "energia", name: "Error de Exactitud (Calibración), Método de Comparación de Pulsos, en diferentes puntos de medición.", matrix: "Equipo de Prueba de Medidor de Energía" },
+            { sector: "energia", name: "Ensayo de Exactitud (Calibración), Método de Comparación de Pulsos, Energía Activa Importada en diferentes puntos de medición.", matrix: "Medidor de Energía eléctrica (Clase 2) electromecánico" },
+            { sector: "energia", name: "Ensayo de Verificación de Constante en Energía Activa, Método de Dosificación de Energía.", matrix: "Medidor de Energía eléctrica (Clase 2) electromecánico" },
+            { sector: "energia", name: "Ensayo de Corriente de Arranque Energía Activa.", matrix: "Medidor de Energía eléctrica (Clase 2) electromecánico" },
+            { sector: "energia", name: "Ensayo de Funcionamiento sin Carga.", matrix: "Medidor de Energía eléctrica (Clase 2) electromecánico" },
+            { sector: "energia", name: "Ensayo de Exactitud (Calibración), Método de Comparación de Pulsos, Energía Activa y Reactiva Importada.", matrix: "Medidor de Energía eléctrica (Estáticos)" },
+            { sector: "energia", name: "Ensayo de Verificación de Constante en Energía Activa y Reactiva, Método de Dosificación de Energía.", matrix: "Medidor de Energía eléctrica (Estáticos)" },
+            { sector: "energia", name: "Ensayo de Arranque Energía Activa y Reactiva.", matrix: "Medidor de Energía eléctrica (Estáticos)" },
+            { sector: "energia", name: "Ensayo de Funcionamiento sin Carga.", matrix: "Medidor de Energía eléctrica (Estáticos)" },
+
+            // Textiles
+            { sector: "textiles", name: "Determinación de la masa por unidad de área (peso) de la tela.", matrix: "Telas" },
+            { sector: "textiles", name: "Determinación del ancho de las telas.", matrix: "Telas" },
+            { sector: "textiles", name: "Determinación del número de hilos de urdimbre y del número de hilos de trama, de tejidos planos.", matrix: "Telas" },
+            { sector: "textiles", name: "Método para determinar la resistencia a la rotura y elongación de las telas. Método del agarre.", matrix: "Telas" },
+            { sector: "textiles", name: "Solidez del color al frote: Método del frictómetro.", matrix: "Telas" },
+            { sector: "textiles", name: "Ensayos de Solidez del color Parte 3. Solidez del color al lavado. Método acelerado.", matrix: "Telas" },
+            { sector: "textiles", name: "Solidez del color a la transpiración.", matrix: "Telas" },
+            { sector: "textiles", name: "Determinación de la resistencia a la formación de motas (pilling) y otros cambios de superficie de las telas.", matrix: "Telas" },
+            { sector: "textiles", name: "Propiedades de los tejidos. parte 2: determinación de la resistencia de las telas al desgarre utilizando el aparato del péndulo balístico.", matrix: "Telas" },
+            { sector: "textiles", name: "Determinación de la resistencia de las telas al desgarre por el procedimiento de lengüeta.", matrix: "Telas" },
+
+            // Transformadores
+            { sector: "transformadores", name: "Error de relación en %. Desplazamiento de Fase en minutos.", matrix: "Transformador de Tensión" },
+            { sector: "transformadores", name: "Error de relación en %. Desplazamiento de Fase en minutos.", matrix: "Transformador de Corriente" },
+
+            // Cuero
+            { sector: "cuero", name: "Determinación de la resistencia a la tracción y porcentaje de elongación.", matrix: "Cuero" },
+            { sector: "cuero", name: "Determinación de la resistencia al desgarre. Parte 1: desgarre simple.", matrix: "Cuero" },
+            { sector: "cuero", name: "Determinación del espesor.", matrix: "Cuero" },
+
+            // Caucho
+            { sector: "caucho", name: "Determinación de densidad.", matrix: "Caucho" },
+            { sector: "caucho", name: "Determinación de las propiedades de tensión.", matrix: "Caucho" },
+            { sector: "caucho", name: "Determinación de la resistencia al desgarre del caucho vulcanizado convencional y de elastómeros termoplásticos.", matrix: "Caucho" }
+        ];
+
+        const sectorMapping = {
+            "no-metalicos": "Construcción No Metálicos",
+            "metalicos": "Construcción Metálicos",
+            "agua": "Medidores de Agua",
+            "energia": "Medidores de Energía",
+            "textiles": "Textiles",
+            "transformadores": "Transformadores",
+            "cuero": "Cueros",
+            "caucho": "Caucho"
+        };
+
+        let currentChronologySector = 'todos';
+
+        window.onload = function() {
+            renderChronologyTable();
+        };
+
+        function switchTab(tabId) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.add('hidden'));
+
+            const activeContent = document.getElementById('content-' + tabId);
+            if (activeContent) {
+                activeContent.classList.remove('hidden');
+            }
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(button => {
+                button.classList.remove('bg-azul', 'text-white');
+                button.classList.add('text-gray-600', 'hover:bg-gray-200');
+            });
+
+            const activeButton = document.getElementById('tab-' + tabId);
+            if (activeButton) {
+                activeButton.classList.add('bg-azul', 'text-white');
+                activeButton.classList.remove('text-gray-600', 'hover:bg-gray-200');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function switchTabWithSector(tabId, sectorId) {
+            switchTab(tabId);
+            filterChronologySector(sectorId);
+        }
+
+        function renderChronologyTable() {
+            const tbody = document.getElementById('chronology-table-body');
+            tbody.innerHTML = '';
+
+            const filteredList = programDatabase.filter(item => {
+                const sectorMatches = (currentChronologySector === 'todos' || item.sector === currentChronologySector);
+                return sectorMatches;
+            });
+
+            filteredList.forEach(item => {
+                const row = document.createElement('tr');
+                row.className = "hover:bg-gray-50/50 transition";
+                row.innerHTML = `
+                    <td class="p-4"><span class="px-2 py-1 rounded bg-gray-100 text-[10px] font-bold text-gray-500 uppercase">${sectorMapping[item.sector]}</span></td>
+                    <td class="p-4 text-gray-700 font-semibold">${item.name}</td>
+                    <td class="p-4 font-bold text-gray-500">${item.matrix}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterChronologySector(sectorId) {
+            currentChronologySector = sectorId;
+            
+            const filterButtons = document.querySelectorAll('#chronology-sector-filters button');
+            filterButtons.forEach(btn => {
+                btn.classList.remove('bg-azul', 'text-white');
+                btn.classList.add('text-gray-600', 'hover:bg-white');
+            });
+
+            const targetBtn = Array.from(filterButtons).find(btn => btn.getAttribute('onclick').includes(`'${sectorId}'`));
+            if (targetBtn) {
+                targetBtn.classList.add('bg-azul', 'text-white');
+                targetBtn.classList.remove('text-gray-600', 'hover:bg-white');
+            }
+
+            renderChronologyTable();
+        }
+
+        function filterChronology() {
+            const searchVal = document.getElementById('chronology-search').value.toLowerCase();
+            const rows = document.querySelectorAll('#chronology-table-body tr');
+
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                if (text.includes(searchVal)) {
+                    row.classList.remove('hidden');
+                } else {
+                    row.classList.add('hidden');
+                }
+            });
+        }
+
+        function showModal(title, msg) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = msg;
+            
+            const modal = document.getElementById('custom-modal');
+            const card = document.getElementById('modal-card');
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                card.classList.remove('scale-95');
+                card.classList.add('scale-100');
+            }, 50);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('custom-modal');
+            const card = document.getElementById('modal-card');
+            
+            modal.classList.add('opacity-0');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function submitTechnicalInquiry(event) {
+            // event.preventDefault();
+            
+            const labName = document.getElementById('lab-name').value.trim();
+            const labEmail = document.getElementById('lab-email').value.trim();
+            const sectorValue = document.getElementById('lab-sector').value;
+
+            if (!labName || !labEmail || !sectorValue) {
+                showModal('Campos Incompletos', 'Por favor complete todos los datos obligatorios marcados con asterisco (*) antes de continuar.');
+                return;
+            }
+
+            const sectorText = sectorMapping[sectorValue];
+            const feedbackText = `Estimado equipo del laboratorio "${labName}". Hemos registrado de manera exitosa su solicitud de información para el sector de "${sectorText}". Un asesor especializado de PEAMCO S.A.S. se pondrá en contacto al correo electrónico (${labEmail}) para definir los requisitos de participación del esquema sin compromiso.`;
+            
+            showModal('Solicitud Registrada', feedbackText);
+            document.getElementById('contact-technical-form').reset();
+        }
+    </script>
+</body>
+</html>
